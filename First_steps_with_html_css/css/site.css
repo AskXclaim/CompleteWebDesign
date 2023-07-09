@@ -1,0 +1,85 @@
+body {
+    margin: 0;
+    font-family: 'Nunito',sans-serif;
+}
+
+header {
+    background-color: #2E94CC;
+    color: white;
+    font-size: 50px;
+    letter-spacing: 1px;
+    line-height: 3;
+    text-align: center;
+    padding: 25px 0;
+}
+
+article {
+    padding-top: 60px;
+    max-width: 850px;
+    margin: auto;
+}
+
+section img {
+    max-width: 100%;
+}
+
+section > iframe {
+    height: 400px;
+    width: 100%;
+    margin: 50px 0;
+}
+
+#post-title-section {
+    margin-bottom: 30px;
+}
+
+#post-title-section h1{
+    margin: 5px 0;
+font-size: 50px;    
+}
+
+.post {
+    font-size: 12px;
+    line-height: 1.1;
+}
+
+.post-author {
+    color: slategray;
+}
+
+.text-uppercase {
+    text-transform: uppercase;
+}
+
+.hero-section {
+    margin: 50px 0;
+}
+
+#content-section, #link-section{
+    max-width: 680px;
+    margin: auto;
+}
+
+.links{
+    list-style-type: none;
+    margin: 0;
+    padding:0;
+}
+.links li{
+    margin: 7px 0 7px;
+}
+.links li:last-of-type{
+    margin: 0 0 7px;
+}
+a{
+    color: #2E94CC;
+}
+
+footer{
+    max-width: 680px;
+    margin: auto;
+    text-align: center;
+}
+.vertical-align-middle{
+    vertical-align: middle;
+}
