@@ -38,16 +38,17 @@ setResult("fahr_3", convertCelsiusFahrenheit(elementValue));
 const classification = ["John Hill", "Mary Jane", "Gary Vee", "Paricia Mills", "Helen Hall", "Paul Green"];
 const topThreeStudents = classification.slice(-3);
 
-const element = document.getElementById("best_students");
-element.innerHTML = "";
+document.getElementById("best_students").innerHTML=topThreeStudents.reverse();
+// const element = document.getElementById("best_students");
+// element.innerHTML = "";
+//
+// for (let i = 0; i < topThreeStudents.length; i++) {
+//     if (i === topThreeStudents.length - 1)
+//         element.innerHTML += topThreeStudents[i] + " ";
+//     else
+//         element.innerHTML += topThreeStudents[i] + ", ";
+// }
 
-for (let i = 0; i < topThreeStudents.length; i++) {
-    if (i === topThreeStudents.length - 1)
-        element.innerHTML += topThreeStudents[i] + " ";
-    else
-        element.innerHTML += topThreeStudents[i] + ", ";
-}
-;
 
 //Exercise 3
 
@@ -73,12 +74,13 @@ const course = {
     '4_stars_reviews': 80,
     '3_stars_reviews': 33,
     '2_stars_reviews': 20,
-    '1_stars_reviews': 4
+    '1_stars_reviews': 4,
+    "getFiveStarReviewPercentage":getFiveStarReviewPercentage
 };
 
 setResult("course_title", course.title);
 setResult("main_category", course.categories[0]);
-setResult("reviews_5_stars", `${getFiveStarReviewPercentage(course)}%`);
+setResult("reviews_5_stars", `${course.getFiveStarReviewPercentage(course)}%`);
     
 //Exercise 4
 const shoppingList = ["Milk", "Butter", "Juice", "Bread", "Beer", "Rice", "Potatoes", "Chocolate"];
