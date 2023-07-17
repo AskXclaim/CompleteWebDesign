@@ -69,6 +69,12 @@ header nav ul li a {
     text-decoration: none;
 }
 
+header nav ul li a:hover {
+    color: #3E50E5;
+    font-weight: bold;
+    font-size: 17px;
+}
+
 header nav ul li:last-of-type a {
     margin-right: 0;
 }
@@ -136,6 +142,13 @@ section.hero img {
     line-height: 24px;
     text-align: center;
     cursor: pointer;
+}
+
+.hero-content button:hover {
+    cursor: pointer;
+    background-color: #fff;
+    color: #3E50E5;
+    font-size: 16px;
 }
 
 section .product-slider {
@@ -237,6 +250,19 @@ section .product-slider .product-info .price {
 
 }
 
+section .product-slider .product .price .original-price {
+    font-weight: normal;
+    color: #9B9B9B;
+    font-size: 20px;
+    letter-spacing: 0.4px;
+    line-height: 30px;
+    text-decoration: line-through;
+}
+
+section .product-slider .product .price .discounted-price {
+    color: #EC1C1C;
+}
+
 section .product-slider .product-info button {
     background-color: #fff;
     border: 1px solid #000;
@@ -251,17 +277,12 @@ section .product-slider .product-info button {
     cursor: pointer;
 }
 
-section .product-slider .product .price .original-price {
-    font-weight: normal;
-    color: #9B9B9B;
-    font-size: 20px;
-    letter-spacing: 0.4px;
-    line-height: 30px;
-    text-decoration: line-through;
-}
-
-section .product-slider .product .price .discounted-price {
-    color: #EC1C1C;
+section.best-sellers .product:hover .product-info button{
+    cursor: pointer;
+    background-color: #3E50E5;
+    border: 1px solid #3E50E5;
+    color: #fff;
+    font-size: 16px;
 }
 
 section.newsletter {
@@ -273,7 +294,115 @@ section.newsletter {
     border-radius: 10px;
 }
 
-section.newsletter .news-letter-signup-header {
-    font-size: 26px;
-    font-weight: lighter;
+section.newsletter h3 {
+    font-size: 24px;
+    font-weight: normal;
+    letter-spacing: 0.6px;
+    line-height: 42px;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+section.newsletter p {
+    font-size: 16px;
+    letter-spacing: 0.4px;
+    line-height: 42px;
+    font-weight: normal;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+section.newsletter form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+section.newsletter form input {
+    box-sizing: border-box;
+    height: 50px;
+    width: 300px;
+    max-width: 80%;
+    font-size: 14px;
+    color: #3E3E3E;
+    letter-spacing: 0.35px;
+    line-height: 21px;
+    border-radius: 60px 0 0 60px;
+    border: 1px solid #3E3E3E;
+    border-right: 0;
+    padding-left: 22px;
+}
+
+section.newsletter form button {
+    cursor: pointer;
+    box-sizing: border-box;
+    height: 50px;
+    width: 100px;
+    max-width: 20%;
+    border-radius: 0 60px 60px 0;
+    border: 1px solid #3E50E5;
+    background-color: #3E50E5;
+    color: #fff;
+    letter-spacing: 0.35px;
+    line-height: 21px;
+    text-transform: uppercase;
+}
+section.newsletter form button:hover{
+    border: 1px solid #3E3E3E;
+    background-color: #fff;
+    color: #3E50E5;
+}
+footer .bottom-nav {
+    padding: 60px 0;
+    background-color: #3E3E3E;
+}
+
+footer .bottom-nav .container {
+    max-width: 900px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: center;
+}
+
+footer .bottom-nav .container ul .list-title {
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    line-height: 26px;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+footer .bottom-nav .container ul li {
+    list-style-type: none;
+}
+
+footer .bottom-nav .container ul li a {
+    color: #E0E0E0;
+    font-size: 16px;
+    text-decoration: none;
+    letter-spacing: 0.4px;
+    line-height: 22px;
+    margin-top: 0;
+    margin-bottom: 10px;
+    display: block;
+}
+footer .bottom-nav .container ul li a:hover{
+    color: #3E50E5;
+    font-weight: bold;
+    font-size: 18px;
+}
+footer .copy-right {
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: #2B2B2B;
+    color: #fff;
+    font-size: 16px;
+    letter-spacing: 0.4px;
+    line-height: 22px;
 }
