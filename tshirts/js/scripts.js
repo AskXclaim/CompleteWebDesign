@@ -52,7 +52,7 @@ const getData = (products, search_params) => {
     const data = products[`${search_params.color}`];
     return data[`${search_params.style}`];
 }
-const setPicture = (products, search_params) => {
+const updatePicture = (products, search_params) => {
     const value = getData(products, search_params);
     const photo_product_img = $("#photo-product");
     photo_product_img.attr("src", `./img/${value.photo}`);
@@ -65,22 +65,37 @@ const getTotal = (products, search_params) => {
 
     let totalAmount = parseFloat((search_params.quantity * unitPrice)).toFixed(2);
 
-    if (search_params.quantity > 100)
-        totalAmount += totalAmount * 0.05;
-    if (search_params.quantity > 500)
-        totalAmount += totalAmount * 0.12;
     if (search_params.quantity > 1000)
-        totalAmount += totalAmount * 0.20;
+        totalAmount -= totalAmount * 0.20;
+    else if (search_params.quantity > 500)
+        totalAmount -= totalAmount * 0.12;
+    else if (search_params.quantity > 100)
+        totalAmount -= totalAmount * 0.05;
 
-    return parseFloat(totalAmount).toFixed(2);
+    return parseFloat(totalAmount).toLocaleString
+    ("en-US",
+        {
+            style: "currency",
+            currency: "USD"
+        });
 }
-const setResult = (products, search_params) => {
+const updateResult = (products, search_params) => {
     $("#result-style").html(`${search_params.style}`);
     $("#result-quality").html(`${search_params.quality}g/m2`);
     $("#result-color").html(`${search_params.color}`);
     $("#result-quantity").html(`${search_params.quantity}`);
-    $("#price").html(`$${getTotal(products, search_params)}`);
+    $("#price").html(`US${getTotal(products, search_params)}`);
 };
+
+const updatePage = (products, search_params) => {
+    $(".refresh-loader").show();
+    updatePicture(products, search_params);
+    updateResult(products, search_params);
+    window.setTimeout(() => {
+        $(".refresh-loader").hide();
+
+    }, 500)
+}
 
 $(function () {
     const quantity_input = $("#quantity");
@@ -88,7 +103,8 @@ $(function () {
 
     quantity_input.keyup(() => {
         search_params.quantity = parseInt(quantity_input.val());
-        setResult(products, search_params);
+        // should chnage this to updatePage(products, search_params);
+        updateResult(products, search_params);
 
     });
 
@@ -102,8 +118,7 @@ $(function () {
             colored_div.removeClass("selected");
             whiteColor_div.addClass("selected");
             search_params.color = whiteColor_div.attr("id");
-            setPicture(products, search_params);
-            setResult(products, search_params);
+            updatePage(products, search_params);
         }
     });
 
@@ -112,8 +127,7 @@ $(function () {
             whiteColor_div.removeClass("selected");
             colored_div.addClass("selected");
             search_params.color = colored_div.attr("id");
-            setPicture(products, search_params);
-            setResult(products, search_params);
+            updatePage(products, search_params);
         }
     });
 
@@ -127,8 +141,7 @@ $(function () {
             quality190_div.removeClass("selected");
             quality150_div.addClass("selected");
             search_params.quality = quality.low;
-            setPicture(products, search_params);
-            setResult(products, search_params);
+            updatePage(products, search_params);
         }
     });
 
@@ -137,8 +150,7 @@ $(function () {
             quality150_div.removeClass("selected");
             quality190_div.addClass("selected");
             search_params.quality = quality.high;
-            setPicture(products, search_params);
-            setResult(products, search_params);
+            updatePage(products, search_params);
         }
     });
 
@@ -147,10 +159,7 @@ $(function () {
     style_options.change(() => {
         const style_selectedOption = $("#style option:selected")
         search_params.style = style_selectedOption.val();
-        setPicture(products, search_params);
-        setResult(products, search_params);
+        updatePage(products, search_params);
     });
-
-    setPicture(products, search_params);
-    setResult(products, search_params);
+    updatePage(products, search_params);
 });
