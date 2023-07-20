@@ -12,9 +12,21 @@
 //
 // document.getElementById("delivery_time").innerHTML = (Math.floor(getDayDifference(date1, date2))).toString();
 
-const clockTimeInterval = window.setInterval(()=>{
-    const now = new Date();
-    document.getElementById("seconds").innerHTML= now.getSeconds().toString().padStart(2,"0");
-    document.getElementById("minutes").innerHTML= now.getMinutes().toString().padStart(2,"0");
-    document.getElementById("hours").innerHTML= now.getHours().toString().padStart(2,"0");
-},1000)
+// const clockTimeInterval = window.setInterval(()=>{
+//     const now = new Date();
+//     document.getElementById("seconds").innerHTML= now.getSeconds().toString().padStart(2,"0");
+//     document.getElementById("minutes").innerHTML= now.getMinutes().toString().padStart(2,"0");
+//     document.getElementById("hours").innerHTML= now.getHours().toString().padStart(2,"0");
+// },1000)
+
+$(() => {
+    const fullName_Input = $("#fullName");
+    const submit_btn = $("#submit");
+    fullName_Input.on({
+        input: () => {
+            fullName_Input.val().length === 0
+                ? submit_btn.hide(0)
+                : submit_btn.show(0);
+        }
+    })
+});

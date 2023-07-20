@@ -13,19 +13,29 @@
 <body>
 <header>
     <div class="container">
-        <section class="logo"><strong>Your</strong>
-            <span class="blue-dot"></span><span>Logo</span></section>
+            <section class="logo">
+                <a href="./index.html">
+                <strong>Your</strong>
+                <span class="blue-dot"></span><span>Logo</span>
+                </a>
+            </section>
         <nav>
             <ul>
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Promotions</a></li>
-                <li><a href="#">News letter</a></li>
+                <li><a href="./aboutus.html">About Us</a></li>
+                <li><a href="./index.html#best-seller-section">Best Sellers</a></li>
+                <li><a href="./index.html#newsletter-section">News letter</a></li>
+                <li class="menu-icon"><img src="./images/menu_icon.png" alt="hamburger menu"></li>
             </ul>
         </nav>
     </div>
 </header>
 <section class="hero">
-    <img src="./images/Hero_image.jpg" alt="Hero image - smart watch">
+    <picture>
+        <source media="(max-width:576px)" srcset="./images/Hero_Mobile.jpg">
+        <source media="(max-width:960px)" srcset="./images/Hero_Tablet.jpg">
+        <source media="(max-width:1440px)" srcset="./images/Hero_Desktop.jpg">
+        <img src="./images/Hero_Large_Desktop.jpg" alt="Hero image - smart watch">
+    </picture>
     <div class="hero-content">
         <div class="container">
             <h1>Explore our new smart watches</h1>
@@ -37,7 +47,7 @@
     </div>
 </section>
 
-<section class="best-sellers">
+<section id="best-seller-section" class="best-sellers">
     <h2>Best Seller</h2>
     <hr>
     <div class="product-slider">
@@ -88,7 +98,7 @@
     </div>
 </section>
 
-<section class="newsletter">
+<section id="newsletter-section" class="newsletter">
     <div class="">
         <h3>News Letter Signup</h3>
         <p>Subscribe now and don't miss a single deal!</p>
