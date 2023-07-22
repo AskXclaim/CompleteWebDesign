@@ -1,27 +1,38 @@
+const vueTodoApp = "vueTodoApp";
 const resetTodoItem = () => {
     return {
-        title: null,
+        text: null,
         done: false
     }
 };
 const todoList = [];
-const aTodoItem = resetTodoItem();
+const newTodo = resetTodoItem();
 
 const todoListApp = {
     data() {
         return {
             todoList: todoList,
-            aTodoItem: aTodoItem
+            newTodo: newTodo
         }
     },
+    created() {
+        this.todoList = window.localStorage.getItem(vueTodoApp)
+            ? JSON.parse(localStorage.getItem(vueTodoApp)) : this.todoList;
+    },
+
+    updated() {
+        window.localStorage.setItem
+        (vueTodoApp, JSON.stringify(this.todoList));
+    },
+
     methods: {
         addItem: function () {
-            if (this.aTodoItem.title) {
+            if (this.newTodo.text) {
                 this.todoList.push({
-                    title: this.aTodoItem.title,
+                    title: this.newTodo.text,
                     done: false
                 });
-                this.aTodoItem = resetTodoItem();
+                this.newTodo = resetTodoItem();
             } else
                 window.alert("Include a  text");
         },

@@ -27,13 +27,14 @@
             <!--            <div class="single-todo done">-->
             <!--                <p>Learn the basics of Vue JS</p>-->
             <!--            </div>-->
-            <template v-for="item in todoList">
-                <div @click="item.done=!item.done"
+           
+                <div v-for="item in todoList"
+                     @click="item.done=!item.done"
                      class="single-todo"
                      :class="{done:item.done}">
                     <p>{{item.title}}</p>
                 </div>
-            </template>
+    
         </div>
 
         <button v-if="todoList.length>0"
@@ -41,7 +42,7 @@
                 class="clear">Clear All
         </button>
 
-        <input type="text" placeholder="Add new to-do" v-model="aTodoItem.title">
+        <input type="text" placeholder="Add new to-do" v-model="newTodo.text">
         <button @click="addItem()" class="add">Add</button>
 
         <div class="instructions">
