@@ -2,21 +2,40 @@
   <div v-if="this.isErrorPresent" class="container error">
     <span v-html="this.error"></span>
   </div>
-  <div v-if="!this.isErrorPresent" class="container">
-    <section class="question-section">
-      <div class="question">
-        <h1 v-html="this.question"></h1>
-      </div>
-    </section>
-    <section class="answers-section">
-      <div class="answers">
-        <span>Answers</span>
-      </div>
-    </section>
-    <section class="controls-section">
-      <div class="controls">controlls</div>
-    </section>
-  </div>
+  <template v-if="this.question">
+    <div v-if="!this.isErrorPresent" class="container">
+      <section class="question-section">
+        <div class="question">
+          <h1 v-html="this.question"></h1>
+        </div>
+      </section>
+      <section class="answers-section">
+        <div class="answers">
+          <div class="answers-header">Choose an answer</div>
+          <template
+            v-for="(answer, index) in this.answers"
+            :key="answer + index"
+          >
+            <div class="answer-item">
+              <input
+                type="radio"
+                :id="answer + index"
+                name="answer"
+                :value="answer"
+                v-model="this.selectedAnswer"
+              />
+              <label :for="answer + index" v-html="answer"></label>
+            </div>
+          </template>
+        </div>
+      </section>
+      <section class="controls-section">
+        <div class="controls">
+          <button class="submit-button" type="submit">Submit</button>
+        </div>
+      </section>
+    </div>
+  </template>
 </template>
 
 <script>
@@ -34,8 +53,18 @@ export default {
       error: undefined,
     };
   },
+  computed: {
+    answers() {
+      // const ans = JSON.parse(JSON.stringify(this.incorrectAnswers));
+      let answers = [];
+      answers.push(...this.incorrectAnswers);
+      const index = Math.round(Math.random() * answers.length);
+      answers.splice(index, 0, this.correctAnswer);
+      return answers;
+    },
+  },
   methods: {
-    getQuestion() {
+    getQuestion: function () {
       this.axios.get(this.api).then((response) => {
         if (!response.data || response.data.response_code !== 0) {
           this.isErrorPresent = true;
@@ -47,7 +76,6 @@ export default {
         this.question = dataResult.question;
         this.correctAnswer = dataResult.correct_answer;
         this.incorrectAnswers = dataResult.incorrect_answers;
-        console.log(response.data);
       });
     },
   },
@@ -64,7 +92,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin: 60px auto;
+  max-width: 960px;
 
   .error {
     width: 100%;
@@ -72,15 +101,6 @@ export default {
     font-size: 26px;
     font-weight: bolder;
     letter-spacing: 0.5px;
-  }
-
-  .container {
-    box-sizing: border-box;
-    background-color: #ffffff;
-    margin: 40px auto;
-    width: 1044px;
-    max-width: 80%;
-    min-width: 520px;
   }
 
   .question-section {
@@ -95,7 +115,7 @@ export default {
   .question {
     padding: 0 10px;
     height: 100%;
-    width: 65ch;
+    width: 70ch;
     letter-spacing: 0.5px;
     line-height: 2.2em;
   }
@@ -105,6 +125,31 @@ export default {
     padding: 20px 0;
     font-size: 16px;
     font-weight: bold;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .answers-header {
+    font-size: 20px;
+    font-weight: bolder;
+    margin-bottom: 10px;
+  }
+
+  .answers {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .answer-item {
+    text-wrap: wrap;
+  }
+
+  .answer-item input[type="radio"] {
+    margin: 10px 5px;
+  }
+
+  .answer-item label {
+    margin: 10px 5px;
   }
 
   .controls-section {
@@ -112,6 +157,18 @@ export default {
     padding: 20px 0;
     font-size: 16px;
     font-weight: bold;
+  }
+  .submit-button {
+    margin: 0;
+    border: 0;
+    border-radius: 6px;
+    box-shadow: 10px 10px 16px 0px rgba(147, 166, 173, 0.75);
+    background-color: #eef7fb;
+    padding: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    cursor: pointer;
   }
 }
 </style>
