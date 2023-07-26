@@ -1,12 +1,17 @@
 <template>
-  <div class="container">
+  <div v-if="this.isErrorPresent" class="container error">
+    <span v-html="this.error"></span>
+  </div>
+  <div v-if="!this.isErrorPresent" class="container">
     <section class="question-section">
       <div class="question">
-        <h1>Question one</h1>
+        <h1 v-html="this.question"></h1>
       </div>
     </section>
     <section class="answers-section">
-      <div class="answers">Answer section</div>
+      <div class="answers">
+        <span>Answers</span>
+      </div>
     </section>
     <section class="controls-section">
       <div class="controls">controlls</div>
@@ -17,6 +22,38 @@
 <script>
 export default {
   name: "App",
+  data() {
+    return {
+      api: "https://opentdb.com/api.php?amount=1",
+      question: undefined,
+      displayedAnswers: undefined,
+      selectedAnswer: undefined,
+      incorrectAnswers: undefined,
+      correctAnswer: undefined,
+      isErrorPresent: false,
+      error: undefined,
+    };
+  },
+  methods: {
+    getQuestion() {
+      this.axios.get(this.api).then((response) => {
+        if (!response.data || response.data.response_code !== 0) {
+          this.isErrorPresent = true;
+          this.error = `An error occurred. No question was gotten, please try again later`;
+          return;
+        }
+
+        const dataResult = response.data?.results[0];
+        this.question = dataResult.question;
+        this.correctAnswer = dataResult.correct_answer;
+        this.incorrectAnswers = dataResult.incorrect_answers;
+        console.log(response.data);
+      });
+    },
+  },
+  created() {
+    this.getQuestion();
+  },
 };
 </script>
 
@@ -29,6 +66,14 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 
+  .error {
+    width: 100%;
+    color: #ad828c;
+    font-size: 26px;
+    font-weight: bolder;
+    letter-spacing: 0.5px;
+  }
+
   .container {
     box-sizing: border-box;
     background-color: #ffffff;
@@ -39,23 +84,20 @@ export default {
   }
 
   .question-section {
-    height: 100px;
     display: flex;
     flex-direction: row;
+    background-color: #93a6ad;
     align-items: center;
     justify-content: center;
     font-size: 16px;
   }
 
   .question {
-    background-color: #93a6ad;
+    padding: 0 10px;
     height: 100%;
-    width: 100%;
-  }
-
-  .question h1 {
-    margin: 33px auto;
-    letter-spacing: 1px;
+    width: 65ch;
+    letter-spacing: 0.5px;
+    line-height: 2.2em;
   }
 
   .answers-section {
