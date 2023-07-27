@@ -2,7 +2,7 @@
   <div v-if="this.isErrorPresent" class="container error">
     <span v-html="this.error"></span>
   </div>
-  <template v-if="this.question">
+  <template v-if="this.question && this.incorrectAnswers">
     <div v-if="!this.isErrorPresent" class="container">
       <section class="question-section">
         <div class="question">
@@ -29,9 +29,34 @@
           </template>
         </div>
       </section>
+      <template v-if="this.isAnswerSubmitted">
+        <section class="result-section">
+          <div
+            v-if="this.selectedAnswer !== this.correctAnswer"
+            v-html="'&#10060; Sorry wrong answer'"
+          ></div>
+          <span v-else v-html="'&#10003; Your answer is correct!'"></span>
+        </section>
+      </template>
       <section class="controls-section">
         <div class="controls">
-          <button class="submit-button" type="submit">Submit</button>
+          <button
+            v-if="!this.isAnswerSubmitted"
+            class="submit-button"
+            :disabled="!this.selectedAnswer"
+            type="submit"
+            @click="this.submitAnswer()"
+          >
+            Submit
+          </button>
+          <button
+            v-if="isAnswerSubmitted"
+            class="submit-button"
+            type="submit"
+            @click="this.getQuestionAndAnswers()"
+          >
+            Next Question
+          </button>
         </div>
       </section>
     </div>
@@ -39,16 +64,19 @@
 </template>
 
 <script>
+import { isProxy, toRaw } from "vue";
+
 export default {
   name: "App",
   data() {
     return {
       api: "https://opentdb.com/api.php?amount=1",
+      dataResult: undefined,
       question: undefined,
-      displayedAnswers: undefined,
       selectedAnswer: undefined,
       incorrectAnswers: undefined,
       correctAnswer: undefined,
+      isAnswerSubmitted: undefined,
       isErrorPresent: false,
       error: undefined,
     };
@@ -64,23 +92,67 @@ export default {
     },
   },
   methods: {
-    getQuestion: function () {
-      this.axios.get(this.api).then((response) => {
+    getQuestion: async function () {
+      await this.axios.get(this.api).then((response) => {
         if (!response.data || response.data.response_code !== 0) {
           this.isErrorPresent = true;
           this.error = `An error occurred. No question was gotten, please try again later`;
           return;
         }
-
-        const dataResult = response.data?.results[0];
-        this.question = dataResult.question;
-        this.correctAnswer = dataResult.correct_answer;
-        this.incorrectAnswers = dataResult.incorrect_answers;
+        this.resetErrorData();
+        this.question = response.data.results[0].question;
+        this.dataResult = {
+          correct_answer: response.data.results[0].correct_answer,
+          incorrect_answers: [...response.data.results[0].incorrect_answers],
+        };
+        return this.dataResult;
       });
     },
+    setAnswers() {
+      if (isProxy(this.dataResult)) {
+        this.dataResult = {
+          ...toRaw(this.dataResult),
+        };
+      }
+      this.correctAnswer = this.dataResult.correct_answer;
+      this.incorrectAnswers = this.dataResult.incorrect_answers;
+      this.dataResult = undefined;
+    },
+    resetErrorData() {
+      this.isErrorPresent = false;
+      this.error = undefined;
+    },
+    resetData() {
+      this.dataResult = undefined;
+      this.question = undefined;
+      this.selectedAnswer = undefined;
+      this.incorrectAnswers = undefined;
+      this.correctAnswer = undefined;
+      this.isAnswerSubmitted = undefined;
+      this.resetErrorData();
+    },
+
+    submitAnswer() {
+      if (!this.selectedAnswer) {
+        alert("Select an option before submitting.");
+        return;
+      }
+
+      this.isAnswerSubmitted = true;
+      if (this.selectedAnswer === this.correctAnswer) {
+        console.log("correct answer");
+      } else {
+        console.log("wrong answer");
+      }
+    },
+    async getQuestionAndAnswers() {
+      this.resetData();
+      await this.getQuestion();
+      this.setAnswers();
+    },
   },
-  created() {
-    this.getQuestion();
+  async created() {
+    await this.getQuestionAndAnswers();
   },
 };
 </script>
@@ -152,12 +224,23 @@ export default {
     margin: 10px 5px;
   }
 
+  .result-section {
+    background-color: #eef7fb;
+    padding: 20px 0;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
   .controls-section {
     background-color: #93a6ad;
     padding: 20px 0;
     font-size: 16px;
     font-weight: bold;
   }
+
   .submit-button {
     margin: 0;
     border: 0;
@@ -169,6 +252,10 @@ export default {
     font-weight: bold;
     letter-spacing: 0.5px;
     cursor: pointer;
+  }
+
+  .submit-button:disabled {
+    cursor: not-allowed;
   }
 }
 </style>
