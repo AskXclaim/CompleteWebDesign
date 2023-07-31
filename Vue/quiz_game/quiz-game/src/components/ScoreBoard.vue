@@ -12,7 +12,7 @@
 <script>
 export default {
   name: "ScoreBoard",
-  // props: ["player", "computer"],
+  // props: ["player", "computer"], you can use string arrays too for props
   props: { player: Number, computer: Number },
 };
 </script>
