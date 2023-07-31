@@ -1,9 +1,10 @@
-<template>
-  <div v-if="this.isErrorPresent" class="container error">
+<template class="container">
+  <ScoreBoard :player="this.player" :computer="this.computer" />
+  <div v-if="this.isErrorPresent" class="error">
     <span v-html="this.error"></span>
   </div>
   <template v-if="this.question && this.incorrectAnswers">
-    <div v-if="!this.isErrorPresent" class="container">
+    <div v-if="!this.isErrorPresent">
       <section class="question-section">
         <div class="question">
           <h1 v-html="this.question"></h1>
@@ -65,6 +66,7 @@
 
 <script>
 import { isProxy, toRaw } from "vue";
+import ScoreBoard from "@/components/ScoreBoard.vue";
 
 export default {
   name: "App",
@@ -79,6 +81,8 @@ export default {
       isAnswerSubmitted: undefined,
       isErrorPresent: false,
       error: undefined,
+      player: 0,
+      computer: 0,
     };
   },
   computed: {
@@ -139,11 +143,8 @@ export default {
       }
 
       this.isAnswerSubmitted = true;
-      if (this.selectedAnswer === this.correctAnswer) {
-        console.log("correct answer");
-      } else {
-        console.log("wrong answer");
-      }
+      if (this.selectedAnswer === this.correctAnswer) this.player += 1;
+      else this.computer += 1;
     },
     async getQuestionAndAnswers() {
       this.resetData();
@@ -153,6 +154,9 @@ export default {
   },
   async created() {
     await this.getQuestionAndAnswers();
+  },
+  components: {
+    ScoreBoard,
   },
 };
 </script>
