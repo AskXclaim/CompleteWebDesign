@@ -2,20 +2,21 @@
   <div class="basket">
     <div class="items">
 
-      <div class="item">
-        <div class="remove">Remove item</div>
-        <div class="photo"><img src="https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg" alt=""></div>
-        <div class="description">Mens Casual Premium Slim Fit T-Shirts </div>
+      <div class="item" v-for="(product, index) in this.productsInBasket" :key="index">
+        <div class="remove" @click="this.removeItem(product.id)">Remove item</div>
+        <div class="photo"><img :src="product.image" :alt="product.title"></div>
+        <div class="description">{{ product.title }}</div>
         <div class="price">
           <span class="quantity-area">
-            <button disabled="">-</button>
-            <span class="quantity">1</span>
-            <button>+</button>
+            <button :disabled="product.quantity===1" @click="this.decreaseItemQuantity(product.id)">-</button>
+            <span class="quantity">{{ product.quantity }}</span>
+            <button @click="this.increaseItemQuantity(product.id)">+</button>
           </span>
-          <span class="amount">US$ 22.30</span>
+          <span class="amount">US$ {{ this.getPrice(product.price, product.quantity) }}</span>
         </div>
       </div>
-      <div class="grand-total"> Grand Total: US$ 22.30</div>
+      <div v-if="this.productsInBasket.length" class="grand-total"> Grand Total: US$ {{ this.getGrandTotal() }}</div>
+      <div v-else class="no-grand-total">No item(s) in the basket</div>
 
     </div>
   </div>
@@ -23,23 +24,58 @@
 
 <script>
 
+import {mapState} from "vuex";
+
 export default {
   name: 'ShoppingBasket',
 
-  methods: {
-   
+  data() {
+    return {}
   },
- 
+  computed: mapState(["productsInBasket"]),
+
+  methods: {
+    removeItem(productId) {
+      this.$store.dispatch("removeFromBasket", productId);
+    },
+    getPrice(unitPrice, quantity) {
+      if (unitPrice && quantity && typeof unitPrice === "number" && typeof quantity === "number")
+        return (unitPrice * quantity).toFixed(2);
+
+      return "--";
+    },
+    getGrandTotal() {
+      // let grandTotal = 0;
+      // this.productsInBasket.forEach((item) => {
+      //   grandTotal += parseFloat(this.getPrice(item.price, item.quantity));
+      // });
+
+      return (this.productsInBasket.reduce((total, item) => {
+        total += parseFloat(this.getPrice(item.price, item.quantity));
+        return total;
+      }, 0)).toFixed(2);
+    },
+
+    decreaseItemQuantity(productId) {
+      this.$store.dispatch("decreaseItemQuantity", productId);
+    },
+    increaseItemQuantity(productId) {
+      this.$store.dispatch("increaseItemQuantity", productId);
+    },
+  },
+
 }
 </script>
 
 <style lang="scss">
 
 .basket {
-  padding: 60px 0;  
+  padding: 60px 0;
+
   .items {
     max-width: 800px;
     margin: auto;
+
     .item {
       display: flex;
       justify-content: space-between;
@@ -71,7 +107,7 @@ export default {
 
         .quantity {
 
-            margin: 0 4px;
+          margin: 0 4px;
         }
       }
 
@@ -97,13 +133,20 @@ export default {
         }
       }
     }
-      .grand-total {
-          font-size: 24px;
-          font-weight: bold;
-          text-align: right;
-          margin-top: 8px;
-      }
 
+    .grand-total {
+      font-size: 24px;
+      font-weight: bold;
+      text-align: right;
+      margin-top: 8px;
+    }
+
+    .no-grand-total {
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 8px;
+    }
   }
 
 }
